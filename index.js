@@ -5,6 +5,8 @@ import { schedule } from 'node-cron';
 const app = express();
 const port = 3000;
 
+app.use(express.static(__dirname + '/public'));
+
 await mongoose.connect('mongodb+srv://doadmin:aC526841PZw3FAV7@db-mongodb-sfo3-94584-3f8c67d1.mongo.ondigitalocean.com/admin?tls=true&authSource=admin'
 )
     .then(() => { console.log('Successfully connected to DB') })
