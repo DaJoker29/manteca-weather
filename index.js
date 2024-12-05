@@ -50,6 +50,10 @@ app.get('/zip', async (req, res) => {
     res.send(temps);
 });
 
+app.get('/', (req, res) => {
+    res.send('Testing');
+});
+
 app.listen(port, () => {
     console.log(`Weather app is running on port ${port}.`);
     schedule('*/10 * * * *', () => {
