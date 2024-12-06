@@ -1,6 +1,29 @@
+body {
+    background-color: #1e1e1e;
+    color: #e1e1e1;
+    font-family: system-ui, sans-serif;
+    font-weight: normal;
+    text-align: center;
+}
+
+a:link,
+a:visited {
+    color: aqua;
+}
+
 .title {
     display: grid;
     place-content: center;
+}
+
+.current {
+    display: grid;
+    place-content: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: aqua;
+    color: #1e1e1e;
+    font-size: 1.4rem;
 }
 
 .recent-updates {
@@ -14,8 +37,4 @@
     gap: var(--gap);
     flex-flow: wrap;
     flex-direction: column;
-}
-
-.recent-updates> :first-child {
-    font-weight: 900;
 }
