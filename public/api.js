@@ -1,19 +1,18 @@
 const endpoint = 'http://localhost:3000';
 
 async function getRecent() {
-    const url = endpoint + '/all';
+    const url = endpoint + '/recent';
     const options = { method: 'GET' }
 
     const recent = await fetch(url, options)
-        .then(response => response.json())
+        .then(res => res.json())
         .then(json => {
+            console.log(json);
             json.forEach(temp => {
-                if (temp.hasOwnProperty('body')) {
-                    console.log(temp.body.data.values.temperature);
-                }
+                console.log(`Temperature: ${temp.body.data.values.temperature} — ${moment(temp.body.data.time).format('MM-DD-YYYY')}`)
             });
-        });
-    console.log(recent);
+        })
+        .catch(err => console.error(err));
 }
 
 export default function api() {

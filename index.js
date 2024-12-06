@@ -11,13 +11,6 @@ const port = 3000;
 app.use(cors());
 app.use(express.static('public'));
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Accept,Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
 
 // Connecting to MongoDB
 const dbPass = 'r3P4jXA0W6gO8275';
@@ -32,39 +25,40 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const temperatureSchema = new Schema({
-    zip: Number,
-    body: Object,
+    zip: {
+        type: Number,
+        required: true
+    },
+    body: {
+        type: Object,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    }
 });
 
 const Temps = mongoose.model('Temperature', temperatureSchema);
 
-
+app.get('/temps/delete', async (req, res) => {
+    await Temps.deleteMany({});
+    res.send('Deleted');
+});
 
 app.get('/zip/:zip', (req, res) => {
-    const url = `https://api.tomorrow.io/v4/weather/realtime/?location=${req.params.zip}`;
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            apikey: 'nxv23IaiVCPP8mLj9sgYbQp7oWpaNUMF'
-        }
-    }
-
-    fetch(url, options)
-        .then(res => res.json())
-        .then(async (body) => {
-            console.log(body);
-            await Temps.create({ zip: req.params.zip, body }).then(x => console.log(x))
-        })
-        .then(res.send('Fetched'))
-        .then(json => console.log(json))
-        .catch(err => console.error(err))
-        ;
+    saveWeatherData(req.params.zip);
+    res.send('Saving...');
 });
 
 app.get('/all', async (req, res) => {
     const temps = await Temps.find({});
-    res.send(temps);
+    res.json(temps);
+});
+
+app.get('/recent', async (req, res) => {
+    const recents = await Temps.find().sort('-createdAt').limit(10);
+    res.json(recents);
 });
 
 app.get('/', (req, res) => {
@@ -75,11 +69,7 @@ app.listen(port, () => {
     console.log(`Weather app is running on port ${port}.`);
 });
 
-schedule('*/10 * * * *', () => {
-    fetchWeatherData(95337);
-});
-
-function fetchWeatherData(zipCode) {
+async function saveWeatherData(zipCode) {
     const url = `https://api.tomorrow.io/v4/weather/realtime/?location=${zipCode}`;
     const options = {
         method: 'GET',
@@ -89,13 +79,14 @@ function fetchWeatherData(zipCode) {
         }
     }
 
-    fetch(url, options)
-        .then(async res => {
-            const body = res.json()
-            await Temps.create({ zipCode, body });
-        })
+    await fetch(url, options)
+        .then(res => res.json())
+        .then(async json => await Temps.create({ zip: zipCode, body: json }))
         .then(() => console.log('Successfully fetched weather data.'))
         .catch(err => console.error(err));
 }
 
-// Add NodeCron to pull from API every ten minutes
+// Schedule API fetches
+schedule('*/10 * * * *', () => {
+    saveWeatherData(95337);
+});
