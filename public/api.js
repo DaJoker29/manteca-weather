@@ -1,4 +1,4 @@
-const endpoint = 'http://localhost:3000';
+const endpoint = process.env.ENDPOINT || 'http://localhost:3000';
 
 async function displayRecent() {
     const url = endpoint + '/recent';
