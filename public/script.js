@@ -1,5 +1,3 @@
-const endpoint = 'https://manteca-weather-aweym.ondigitalocean.app/';
+import api from './api.js';
 
-export default function () {
-
-}
+api();

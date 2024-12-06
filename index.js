@@ -1,11 +1,23 @@
 import mongoose from 'mongoose';
 import express from 'express';
+import cors from 'cors';
 import { schedule } from 'node-cron';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
 const port = 3000;
+
+app.use(cors());
+app.use(express.static('public'));
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Accept,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
 
 // Connecting to MongoDB
 const dbPass = 'r3P4jXA0W6gO8275';
