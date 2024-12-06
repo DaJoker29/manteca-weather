@@ -1,0 +1,21 @@
+.title {
+    display: grid;
+    place-content: center;
+}
+
+.recent-updates {
+    --min: 15ch;
+    --gap: 1rem;
+
+    min-width: 50vw;
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    gap: var(--gap);
+    flex-flow: wrap;
+    flex-direction: column;
+}
+
+.recent-updates> :first-child {
+    font-weight: 900;
+}

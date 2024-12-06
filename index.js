@@ -3,8 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import { schedule } from 'node-cron';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
+// Initialize ExpressJS
 const app = express();
 const port = 3000;
 
@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 
-// Connecting to MongoDB
+// Connect to MongoDB
 const dbPass = 'r3P4jXA0W6gO8275';
 const dbUrl = `mongodb+srv://doadmin:${dbPass}@db-mongodb-sfo3-94584-3f8c67d1.mongo.ondigitalocean.com/admin?replicaSet=db-mongodb-sfo3-94584&tls=true&authSource=admin`;
 
@@ -21,6 +21,8 @@ await mongoose.connect(dbUrl)
     .then(() => { console.log('Successfully connected to DB') })
     .catch(err => console.error(err));
 
+
+// Set DB Model
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
@@ -41,6 +43,7 @@ const temperatureSchema = new Schema({
 
 const Temps = mongoose.model('Temperature', temperatureSchema);
 
+// API Routing
 app.get('/temps/delete', async (req, res) => {
     await Temps.deleteMany({});
     res.send('Deleted');
@@ -57,7 +60,7 @@ app.get('/all', async (req, res) => {
 });
 
 app.get('/recent', async (req, res) => {
-    const recents = await Temps.find().sort('-createdAt').limit(10);
+    const recents = await Temps.find({}).sort({ "body.data.time": -1 }).limit(20);
     res.json(recents);
 });
 
@@ -65,10 +68,13 @@ app.get('/', (req, res) => {
     res.sendFile('index.html', { root: path.join(path.resolve(), 'public') });
 });
 
+
+// Initialize Server
 app.listen(port, () => {
     console.log(`Weather app is running on port ${port}.`);
 });
 
+// Calls to Weather API
 async function saveWeatherData(zipCode) {
     const url = `https://api.tomorrow.io/v4/weather/realtime/?location=${zipCode}`;
     const options = {
