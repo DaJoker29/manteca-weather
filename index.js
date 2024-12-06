@@ -1,17 +1,20 @@
 import mongoose from 'mongoose';
 import express from 'express';
 import { schedule } from 'node-cron';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const port = 3000;
 
-app.use(express.static(__dirname + '/public'));
+// Connecting to MongoDB
+const dbPass = 'r3P4jXA0W6gO8275';
+const dbUrl = `mongodb+srv://doadmin:${dbPass}@db-mongodb-sfo3-94584-3f8c67d1.mongo.ondigitalocean.com/admin?replicaSet=db-mongodb-sfo3-94584&tls=true&authSource=admin`;
 
-await mongoose.connect('mongodb+srv://doadmin:aC526841PZw3FAV7@db-mongodb-sfo3-94584-3f8c67d1.mongo.ondigitalocean.com/admin?tls=true&authSource=admin'
-)
+console.log(`Connecting to Database: ${dbUrl}`);
+await mongoose.connect(dbUrl)
     .then(() => { console.log('Successfully connected to DB') })
     .catch(err => console.error(err));
-
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
@@ -22,6 +25,10 @@ const temperatureSchema = new Schema({
 });
 
 const Temps = mongoose.model('Temperature', temperatureSchema);
+
+app.get('/', (req, res) => {
+    res.sendFile('index.html', { root: path.join(path.resolve(), 'public') });
+});
 
 app.get('/zip/:zip', (req, res) => {
     const url = `https://api.tomorrow.io/v4/weather/realtime/?location=${req.params.zip}`;
@@ -50,16 +57,15 @@ app.get('/zip', async (req, res) => {
     res.send(temps);
 });
 
-app.get('/', (req, res) => {
-    res.send('Testing');
-});
+
 
 app.listen(port, () => {
     console.log(`Weather app is running on port ${port}.`);
-    schedule('*/10 * * * *', () => {
-        fetchWeatherData(95337);
-    });
-})
+});
+
+schedule('*/10 * * * *', () => {
+    fetchWeatherData(95337);
+});
 
 function fetchWeatherData(zipCode) {
     const url = `https://api.tomorrow.io/v4/weather/realtime/?location=${zipCode}`;
@@ -76,7 +82,7 @@ function fetchWeatherData(zipCode) {
             const body = res.json()
             await Temps.create({ zipCode, body });
         })
-        .then(() => 'Successfully fetched weather data.')
+        .then(() => console.log('Successfully fetched weather data.'))
         .catch(err => console.error(err));
 }
 
