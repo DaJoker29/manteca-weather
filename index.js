@@ -26,9 +26,7 @@ const temperatureSchema = new Schema({
 
 const Temps = mongoose.model('Temperature', temperatureSchema);
 
-app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: path.join(path.resolve(), 'public') });
-});
+
 
 app.get('/zip/:zip', (req, res) => {
     const url = `https://api.tomorrow.io/v4/weather/realtime/?location=${req.params.zip}`;
@@ -52,12 +50,14 @@ app.get('/zip/:zip', (req, res) => {
         ;
 });
 
-app.get('/zip', async (req, res) => {
+app.get('/all', async (req, res) => {
     const temps = await Temps.find({});
     res.send(temps);
 });
 
-
+app.get('/', (req, res) => {
+    res.sendFile('index.html', { root: path.join(path.resolve(), 'public') });
+});
 
 app.listen(port, () => {
     console.log(`Weather app is running on port ${port}.`);
