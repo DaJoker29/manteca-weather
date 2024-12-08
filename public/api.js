@@ -1,12 +1,13 @@
-const endpoint = 'https://manteca-weather-aweym.ondigitalocean.app' || 'http://localhost:3000';
+const API_ENDPOINT = 'https://manteca-weather-aweym.ondigitalocean.app';
+
+async function fetchData(route, options) {
+    const url = API_ENDPOINT + route;
+    const response = await fetch(url, options);
+    return await response.json();
+}
 
 async function displayRecent() {
-    const url = endpoint + '/recent';
-    const options = { method: 'GET' }
-
-    const response = await fetch(url, options);
-    const recent = await response.json();
-
+    const recent = await fetchData('/recent', { method: 'GET' });
     const recentContainer = document.querySelector('#recent-updates');
 
     recent.forEach(temp => {
@@ -24,22 +25,13 @@ async function displayRecent() {
 }
 
 async function displayCurrent() {
-    const url = endpoint + '/recent';
-    const options = { method: 'GET' }
-
-    const response = await fetch(url, options);
-    const json = await response.json();
-    const current = json[0];
-
-    console.log(current);
-
+    const current = await fetchData('/current', { method: 'GET' });
     const currentContainer = document.querySelector('#current');
 
     const fahrenheit = cToFDegrees(current.body.data.values.temperature).toFixed(1);
     const text = `Temperature: ${fahrenheit}°\nHumidity: ${current.body.data.values.humidity}%\nWind Speed: ${current.body.data.values.windSpeed}mph\nPrecipitation: ${current.body.data.values.precipitationProbability}%`
 
     const values = text.split('\n');
-    console.log(values);
 
     values.forEach(value => {
         const divContainer = document.createElement('div');

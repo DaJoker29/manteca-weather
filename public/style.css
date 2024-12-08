@@ -4,6 +4,12 @@ body {
     font-family: system-ui, sans-serif;
     font-weight: normal;
     text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: .5rem 0;
 }
 
 a:link,

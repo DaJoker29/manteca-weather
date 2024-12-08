@@ -64,6 +64,11 @@ app.get('/recent', async (req, res) => {
     res.json(recents);
 });
 
+app.get('/current', async (req, res) => {
+    const current = await Temps.find({}).sort({ "body.data.time": -1 }).limit(1);
+    res.json(current);
+});
+
 app.get('/', (req, res) => {
     res.sendFile('index.html', { root: path.join(path.resolve(), 'public') });
 });
