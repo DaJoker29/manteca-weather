@@ -17,18 +17,14 @@ async function displayRecent() {
         const divContainer = document.createElement('div');
         divContainer.textContent = text;
         recentContainer.appendChild(divContainer);
-
-        console.log(text);
     });
-
-    console.log(recent);
 }
 
 async function displayCurrent() {
     const current = await fetchData('/current', { method: 'GET' });
     const currentContainer = document.querySelector('#current');
 
-    const fahrenheit = cToFDegrees(current.body.data.values.temperature).toFixed(1);
+    const fahrenheit = cToFDegrees(current.data.values.temperature).toFixed(1);
     const text = `Temperature: ${fahrenheit}°\nHumidity: ${current.body.data.values.humidity}%\nWind Speed: ${current.body.data.values.windSpeed}mph\nPrecipitation: ${current.body.data.values.precipitationProbability}%`
 
     const values = text.split('\n');

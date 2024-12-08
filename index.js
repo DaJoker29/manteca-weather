@@ -66,7 +66,7 @@ app.get('/recent', async (req, res) => {
 
 app.get('/current', async (req, res) => {
     const current = await Temps.find({}).sort({ "body.data.time": -1 }).limit(1);
-    res.json(current);
+    res.json(current[0]);
 });
 
 app.get('/', (req, res) => {
