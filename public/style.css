@@ -9,12 +9,19 @@ body {
 }
 
 p {
-    margin: .5rem 0;
+    font-weight: 600;
 }
 
+a,
 a:link,
 a:visited {
     color: aqua;
+    text-decoration: none;
+}
+
+a:hover,
+a:active {
+    text-decoration: underline;
 }
 
 .title {
@@ -43,4 +50,42 @@ a:visited {
     gap: var(--gap);
     flex-flow: wrap;
     flex-direction: column;
+}
+
+.temperature {
+    font-size: 4em;
+    margin: 0 auto;
+}
+
+.weatherCode {
+    font-size: 1.2em;
+}
+
+.last-updated {
+    font-size: .75em;
+}
+
+.current-cells {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.current-cells>div {
+    border: 1px solid rgba(127, 127, 127, .15);
+    background-color: #1e1e1e;
+    color: aqua;
+    border-radius: 4px;
+    text-align: left;
+    padding: .5rem 1rem;
+    flex: 1 1 100px;
+}
+
+.current-cells>div>* {
+    margin: 0;
+}
+
+.current-cells>div>:last-child {
+    font-size: .75rem;
 }

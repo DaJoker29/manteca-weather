@@ -10,13 +10,31 @@
 
 <body>
     <main>
-        <h2 class="title">What's the weather like in Manteca?</h2>
+        <h1 class="title">What's the weather like in Manteca?</h1>
         <p>
-            <strong>GitHub Repo:</strong>
-            <a href="https://github.com/DaJoker29/manteca-weather">Manteca Weather App</a>
+            <em>GitHub Repo — <a href="https://github.com/DaJoker29/manteca-weather">@DaJoker29/manteca-weather</a></em>
         </p>
-        </p>
-        <div id="current" class="current"></div>
+        <div id="current" class="current">
+            <p id="temperature" class="temperature"></p>
+            <p id="weatherCode" class="weatherCode"></p>
+            <div class="current-cells">
+                <div>
+                    <p id="humidity" class="humidity"></p>
+                    <p>Humidity</p>
+                </div>
+                <div>
+                    <p id="wind" class="wind"></p>
+                    <p>Wind</p>
+                </div>
+                <div>
+                    <p id="precipitation" class="precipitation"></p>
+                    <p>Precipitation</p>
+                </div>
+            </div>
+            <p>
+                <em id="last-updated" class="last-updated"></em>
+            </p>
+        </div>
         <div id="recent-updates" class="recent-updates"></div>
     </main>
 </body>
