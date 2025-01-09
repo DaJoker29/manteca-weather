@@ -13,8 +13,7 @@ app.use(express.static('public'));
 
 
 // Connect to MongoDB
-const dbPass = 'r3P4jXA0W6gO8275';
-const dbUrl = `mongodb+srv://doadmin:${dbPass}@db-mongodb-sfo3-94584-3f8c67d1.mongo.ondigitalocean.com/admin?replicaSet=db-mongodb-sfo3-94584&tls=true&authSource=admin`;
+const dbUrl = process.env.DB_CONNECT || '';
 
 console.log(`Connecting to Database: ${dbUrl}`);
 await mongoose.connect(dbUrl)

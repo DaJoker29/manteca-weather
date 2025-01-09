@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.32.1",
     "cors": "^2.8.5",
     "express": "^4.21.1",
     "moment": "^2.30.1",
@@ -11,8 +12,7 @@
   "description": "A simple weather app for a very specific location.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "dotenvx run -- node index.js"
   },
   "type": "module",
   "author": "",
