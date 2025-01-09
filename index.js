@@ -85,7 +85,7 @@ async function saveWeatherData(zipCode) {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            apikey: 'nxv23IaiVCPP8mLj9sgYbQp7oWpaNUMF'
+            apikey: process.env.API_KEY
         }
     }
 
